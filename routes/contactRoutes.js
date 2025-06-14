@@ -15,12 +15,12 @@ const transporter = nodemailer.createTransport({
 
 // Post route to send email and save contact data to MongoDB
 router.post('/post', async (req, res) => {
-  const { clientName, contactNumber, email, date, time } = req.body;
+  const { name, email, phone, company, service, message, preferredDate, preferredTime } = req.body;
 
   console.log(req.body); // Log the incoming data for debugging
 
   // Validate required fields
-  if (!clientName || !contactNumber || !email) {
+  if (!name || !phone || !email) {
     return res.status(400).json({ error: 'Name, contact number, and email are required.' });
   }
 
@@ -31,11 +31,14 @@ router.post('/post', async (req, res) => {
     subject: 'New Contact Form Submission',
     html: `
       <h3>Contact Details</h3>
-      <p><strong>Name:</strong> ${clientName}</p>
+      <p><strong>Name:</strong> ${name}</p>
       <p><strong>Email:</strong> ${email}</p>
-      <p><strong>Contact Number:</strong> ${contactNumber}</p>
-      <p><strong>Date:</strong> ${date}</p>
-      <p><strong>Time:</strong> ${time}</p>
+      <p><strong>Contact Number:</strong> ${phone}</p>
+      <p><strong>Date:</strong> ${company}</p>
+      <p><strong>Time:</strong> ${service}</p>
+      <p><strong>Time:</strong> ${message}</p>
+      <p><strong>Time:</strong> ${preferredDate}</p>
+      <p><strong>Time:</strong> ${preferredTime}</p>
     `
   };
 
@@ -46,11 +49,14 @@ router.post('/post', async (req, res) => {
 
     // Save contact data to MongoDB
     const newContact = await Contact.create({
-      clientName,
-      contactNumber,
+      name,
       email,
-      date,
-      time
+      phone,
+      company,
+      service,
+      message,
+      preferredDate,
+      preferredTime
     });
     console.log('Contact data saved to MongoDB:', newContact);
 
